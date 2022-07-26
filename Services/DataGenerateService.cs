@@ -16,11 +16,17 @@ public class DataGenerateService : IDataGenerateService
     private readonly IProduct2Repo _product2Repo;
     private readonly IProductCategoryRepo _productCategoryRepo;
     private readonly IProductCategory2Repo _productCategory2Repo;
+    private readonly IOrderRepo _orderRepo;
+    private readonly IOrder2Repo _order2Repo;
+    private readonly IOrderDetailRepo _orderDetailRepo;
+    private readonly IOrderDetail2Repo _orderDetail2Repo;
 
     public DataGenerateService(IConfiguration configuration, 
         ICustomerRepo customerRepo, ICustomer2Repo customer2Repo,
         IProductRepo productRepo, IProduct2Repo product2Repo,
-        IProductCategoryRepo productCategoryRepo, IProductCategory2Repo productCategory2Repo
+        IProductCategoryRepo productCategoryRepo, IProductCategory2Repo productCategory2Repo,
+        IOrderRepo orderRepo, IOrder2Repo order2Repo,
+        IOrderDetailRepo orderDetailRepo, IOrderDetail2Repo orderDetail2Repo
         )
     {
         _configuration = configuration;
@@ -30,6 +36,10 @@ public class DataGenerateService : IDataGenerateService
         _product2Repo = product2Repo;
         _productCategoryRepo = productCategoryRepo;
         _productCategory2Repo = productCategory2Repo;
+        _orderRepo = orderRepo;
+        _order2Repo = order2Repo;
+        _orderDetailRepo = orderDetailRepo;
+        _orderDetail2Repo = orderDetail2Repo;
     }
     
     public async Task FakeCustomerAsync()
@@ -108,6 +118,32 @@ public class DataGenerateService : IDataGenerateService
         await _productRepo.InsertRangeAsync(products);
     }
 
+    public async Task FakeOrderAsync()
+    {
+        var orderId = 1;
+        var customerCount = _configuration.GetValue<int>("Fakes:CustomerCount");
+        var count = _configuration.GetValue<double>("Fakes:ProductCount");
+        var fakeOrder = new Faker<Order2>()
+            .RuleFor(p => p.Id, f => orderId++)
+            .RuleFor(p => p.Date, f => f.Date.Past(2))
+            .RuleFor(p => p.CustomerId, f => f.Random.Int(1, customerCount));
+        
+        var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
+        var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
+
+        List<Order2>? orders;
+        for (var i = 0; i < chunks; i++)
+        {
+            orders = fakeOrder.Generate(Constants.BatchSize);
+            await _order2Repo.InsertRangeAsync(orders);
+            await _orderRepo.InsertRangeAsync(orders);
+        }
+        
+        orders = fakeOrder.Generate(leftOver);
+        await _order2Repo.InsertRangeAsync(orders);
+        await _orderRepo.InsertRangeAsync(orders);
+    }
+
     public async Task TruncateDatabaseAsync()
     {
         await _customerRepo.TruncateAsync();
@@ -116,5 +152,7 @@ public class DataGenerateService : IDataGenerateService
         await _product2Repo.TruncateAsync();
         await _productCategoryRepo.TruncateAsync();
         await _productCategory2Repo.TruncateAsync();
+        await _orderRepo.TruncateAsync();
+        await _order2Repo.TruncateAsync();
     }
 }
