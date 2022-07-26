@@ -41,6 +41,9 @@ public class Worker : BackgroundService
         _logger.LogInformation("Insert orders");
         await dataGenerateService.FakeOrderAsync();
         
+        _logger.LogInformation("Insert order details");
+        await dataGenerateService.FakeOrderDetailAsync();
+        
         Environment.Exit(0);
     }
 }

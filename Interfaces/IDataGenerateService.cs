@@ -6,5 +6,6 @@ public interface IDataGenerateService
     Task FakeProductCategoryAsync();
     Task FakeProductAsync();
     Task FakeOrderAsync();
+    Task FakeOrderDetailAsync();
     Task TruncateDatabaseAsync();
 }

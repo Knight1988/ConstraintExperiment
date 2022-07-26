@@ -122,7 +122,7 @@ public class DataGenerateService : IDataGenerateService
     {
         var orderId = 1;
         var customerCount = _configuration.GetValue<int>("Fakes:CustomerCount");
-        var count = _configuration.GetValue<double>("Fakes:ProductCount");
+        var count = _configuration.GetValue<double>("Fakes:OrderCount");
         var fakeOrder = new Faker<Order2>()
             .RuleFor(p => p.Id, f => orderId++)
             .RuleFor(p => p.Date, f => f.Date.Past(2))
@@ -144,6 +144,35 @@ public class DataGenerateService : IDataGenerateService
         await _orderRepo.InsertRangeAsync(orders);
     }
 
+    public async Task FakeOrderDetailAsync()
+    {
+        var orderId = 1;
+        var orderDetailId = 1;
+        var productCount = _configuration.GetValue<int>("Fakes:ProductCount");
+        var count = _configuration.GetValue<double>("Fakes:OrderCount");
+        var fakeOrderDetail = new Faker<OrderDetail2>()
+            .RuleFor(p => p.Id, f => orderDetailId++)
+            .RuleFor(p => p.OrderId, f => orderId)
+            .RuleFor(p => p.ProductId, f => f.Random.Int(1, productCount))
+            .RuleFor(p => p.Quantity, f => f.Random.Int(1, 10));
+
+        var orderDetails = new List<OrderDetail2>();
+        var faker = new Faker();
+        for (orderId = 1; orderId <= count; orderId++)
+        {
+            orderDetails.AddRange(fakeOrderDetail.Generate(faker.Random.Int(1, 10)));
+
+            if (orderId % Constants.BatchSize != 0) continue;
+            
+            await _orderDetail2Repo.InsertRangeAsync(orderDetails);
+            await _orderDetailRepo.InsertRangeAsync(orderDetails);
+            orderDetails.Clear();
+        }
+        
+        await _orderDetail2Repo.InsertRangeAsync(orderDetails);
+        await _orderDetailRepo.InsertRangeAsync(orderDetails);
+    }
+
     public async Task TruncateDatabaseAsync()
     {
         await _customerRepo.TruncateAsync();
@@ -154,5 +183,7 @@ public class DataGenerateService : IDataGenerateService
         await _productCategory2Repo.TruncateAsync();
         await _orderRepo.TruncateAsync();
         await _order2Repo.TruncateAsync();
+        await _orderDetailRepo.TruncateAsync();
+        await _orderDetail2Repo.TruncateAsync();
     }
 }
