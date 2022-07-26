@@ -14,6 +14,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddScoped<IDataGenerateService, DataGenerateService>();
         
+        services.AddScoped<ICustomerRepo, CustomerRepo>();
         services.AddScoped<ICustomer2Repo, Customer2Repo>();
     })
     .Build();

@@ -25,10 +25,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.Customer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -42,10 +39,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.Order", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -61,10 +55,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -83,10 +74,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.Product", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -110,10 +98,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.ProductCategory", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Name")
                         .IsRequired()
