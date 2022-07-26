@@ -4,16 +4,18 @@ using ConstraintExperiment.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ConstraintExperiment.Migrations
+namespace ConstraintExperiment.Migrations.Constraint
 {
     [DbContext(typeof(ConstraintContext))]
-    partial class ConstraintContextModelSnapshot : ModelSnapshot
+    [Migration("20220726033214_ChangeIdentity")]
+    partial class ChangeIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

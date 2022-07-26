@@ -5,7 +5,7 @@ namespace ConstraintExperiment.Models.NonConstraint;
 
 public class OrderDetail
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     public int OrderId { get; set; }
     public int ProductId { get; set; }

@@ -4,6 +4,7 @@ using ConstraintExperiment.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ConstraintExperiment.Migrations.NonConstraint
 {
     [DbContext(typeof(NonConstraintContext))]
-    partial class NonConstraintContextModelSnapshot : ModelSnapshot
+    [Migration("20220726033142_ChangeIdentity")]
+    partial class ChangeIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
