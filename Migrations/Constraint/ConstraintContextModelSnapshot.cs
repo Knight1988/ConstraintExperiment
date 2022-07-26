@@ -33,16 +33,13 @@ namespace ConstraintExperiment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.Constraint.Order2", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -54,16 +51,13 @@ namespace ConstraintExperiment.Migrations
 
                     b.HasIndex("CustomerId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.Constraint.OrderDetail2", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -80,7 +74,7 @@ namespace ConstraintExperiment.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Details");
+                    b.ToTable("Details", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.Constraint.Product2", b =>
@@ -106,7 +100,7 @@ namespace ConstraintExperiment.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.Constraint.ProductCategory2", b =>
@@ -120,7 +114,7 @@ namespace ConstraintExperiment.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.Constraint.Order2", b =>

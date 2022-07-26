@@ -33,16 +33,13 @@ namespace ConstraintExperiment.Migrations.NonConstraint
 
                     b.HasKey("Id");
 
-                    b.ToTable("Customers");
+                    b.ToTable("Customers", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.Order", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -52,16 +49,13 @@ namespace ConstraintExperiment.Migrations.NonConstraint
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.OrderDetail", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
@@ -74,7 +68,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
 
                     b.HasKey("Id");
 
-                    b.ToTable("Details");
+                    b.ToTable("Details", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.Product", b =>
@@ -98,7 +92,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ConstraintExperiment.Models.NonConstraint.ProductCategory", b =>
@@ -112,7 +106,7 @@ namespace ConstraintExperiment.Migrations.NonConstraint
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
                 });
 #pragma warning restore 612, 618
         }
