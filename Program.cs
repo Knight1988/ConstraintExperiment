@@ -6,7 +6,6 @@ using ConstraintExperiment.Repositories;
 using ConstraintExperiment.Repositories.Constraint;
 using ConstraintExperiment.Repositories.NonConstraint;
 using ConstraintExperiment.Services;
-using Microsoft.EntityFrameworkCore;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

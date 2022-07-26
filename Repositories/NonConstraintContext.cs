@@ -1,5 +1,4 @@
-﻿using ConstraintExperiment.Models;
-using ConstraintExperiment.Models.NonConstraint;
+﻿using ConstraintExperiment.Models.NonConstraint;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Repositories;
