@@ -32,6 +32,9 @@ public class Worker : BackgroundService
         _logger.LogInformation("Insert customers");
         await dataGenerateService.FakeCustomerAsync();
         
+        _logger.LogInformation("Insert products");
+        await dataGenerateService.FakeProductAsync();
+        
         Environment.Exit(0);
     }
 }

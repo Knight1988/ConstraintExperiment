@@ -1,14 +1,13 @@
 ﻿using ConstraintExperiment.Interfaces;
 using ConstraintExperiment.Models.Constraint;
-using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Repositories;
 
-public class Customer2Repo: BaseRepo<Customer2>, ICustomer2Repo
+public class Product2Repo: BaseRepo<Product2>, IProduct2Repo
 {
     private readonly ConstraintContext _context;
 
-    public Customer2Repo(ConstraintContext context) : base(context, context.Customers, "Customers")
+    public Product2Repo(ConstraintContext context) : base(context, context.Products, "Products")
     {
         _context = context;
     }
