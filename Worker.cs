@@ -21,6 +21,7 @@ public class Worker : BackgroundService
         var constraintContext = scope.ServiceProvider.GetRequiredService<ConstraintContext>();
         var nonConstraintContext = scope.ServiceProvider.GetRequiredService<NonConstraintContext>();
         var dataGenerateService = scope.ServiceProvider.GetRequiredService<IDataGenerateService>();
+        var performanceReportService = scope.ServiceProvider.GetRequiredService<IPerformanceReportService>();
         
         _logger.LogInformation("Migrate Database");
         await constraintContext.Database.MigrateAsync(cancellationToken: stoppingToken);
@@ -43,6 +44,18 @@ public class Worker : BackgroundService
         
         _logger.LogInformation("Insert order details");
         await dataGenerateService.FakeOrderDetailAsync();
+        
+        _logger.LogInformation("Start calculate performance");
+        var report = await performanceReportService.RevenueLastMonthAsync();
+        _logger.LogInformation("Content: {Content}", report.Content);
+        foreach (var constraintTime in report.ConstaintTimes)
+        {
+            _logger.LogInformation("Constraint: {Content}", constraintTime);
+        }
+        foreach (var nonConstraintTime in report.NonConstaintTimes)
+        {
+            _logger.LogInformation("Non Constraint: {Content}", nonConstraintTime);
+        }
         
         Environment.Exit(0);
     }

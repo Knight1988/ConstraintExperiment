@@ -16,6 +16,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddDbContext<ConstraintContext>();
 
         services.AddScoped<IDataGenerateService, DataGenerateService>();
+        services.AddScoped<IPerformanceReportService, PerformanceReportService>();
         
         services.AddScoped<ICustomerRepo, CustomerRepo>();
         services.AddScoped<ICustomer2Repo, Customer2Repo>();
