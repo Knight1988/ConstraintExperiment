@@ -6,6 +6,7 @@ using ConstraintExperiment.Repositories;
 using ConstraintExperiment.Repositories.Constraint;
 using ConstraintExperiment.Repositories.NonConstraint;
 using ConstraintExperiment.Services;
+using Serilog;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -33,6 +34,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IReportYearlyRepo, ReportYearlyRepo>();
         services.AddScoped<IReportYearly2Repo, ReportYearly2Repo>();
     })
+    .UseSerilog((ctx, lc) => lc
+        .WriteTo.Console()
+    )
     .Build();
 
 await host.RunAsync();

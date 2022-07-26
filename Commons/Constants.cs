@@ -2,5 +2,5 @@
 
 public static class Constants
 {
-    public const int BatchSize = 10000;
+    public const int BatchSize = 5000;
 }
