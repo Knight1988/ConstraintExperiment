@@ -34,13 +34,33 @@ public class ReportYearly2Repo : IReportYearly2Repo
             join p in _context.Products on d.ProductId equals p.Id
             where first <= o.Date && o.Date <= last
             group new {p, d} by new { p.Id, p.Name } into g
-            select new BestSellerProduct()
+            select new BestSellerProduct
             {
                 Id = g.Key.Id,
                 Name = g.Key.Name,
                 Quantity = g.Sum(p => p.d.Quantity)
             };
         query = query.OrderByDescending(p => p.Quantity).Take(product);
+        return await query.ToListAsync();
+    }
+
+    public async Task<List<TopCustomer>> TopCustomerInYearAsync(int year, int customer)
+    {
+        var first = new DateTime(year, 1, 1);
+        var last = new DateTime(year + 1, 1, 1).AddDays(-1);
+        var query = from o in _context.Orders
+            join d in _context.Details on o.Id equals d.OrderId
+            join p in _context.Products on d.ProductId equals p.Id
+            join c in _context.Customers on o.CustomerId equals c.Id
+            where first <= o.Date && o.Date <= last
+            group new {p, d} by new { c.Id, c.Name } into g
+            select new TopCustomer
+            {
+                Id = g.Key.Id,
+                Name = g.Key.Name,
+                Spent = g.Sum(p => p.d.Quantity * p.p.Price)
+            };
+        query = query.OrderByDescending(p => p.Spent).Take(customer);
         return await query.ToListAsync();
     }
 }

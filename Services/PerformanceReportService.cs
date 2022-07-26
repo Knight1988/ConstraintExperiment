@@ -14,16 +14,21 @@ public class PerformanceReportService : IPerformanceReportService
     private readonly IReportMonth2Repo _reportMonth2Repo;
     private readonly IReportYearlyRepo _reportYearlyRepo;
     private readonly IReportYearly2Repo _reportYearly2Repo;
+    private readonly IProductRepo _productRepo;
+    private readonly IProduct2Repo _product2Repo;
 
     public PerformanceReportService(IConfiguration configuration, 
         IReportMonthRepo reportMonthRepo, IReportMonth2Repo reportMonth2Repo,
-        IReportYearlyRepo reportYearlyRepo, IReportYearly2Repo reportYearly2Repo)
+        IReportYearlyRepo reportYearlyRepo, IReportYearly2Repo reportYearly2Repo,
+        IProductRepo productRepo, IProduct2Repo product2Repo)
     {
         _configuration = configuration;
         _reportMonthRepo = reportMonthRepo;
         _reportMonth2Repo = reportMonth2Repo;
         _reportYearlyRepo = reportYearlyRepo;
         _reportYearly2Repo = reportYearly2Repo;
+        _productRepo = productRepo;
+        _product2Repo = product2Repo;
     }
 
     public async Task<string> WriteToFileAsync(IEnumerable<PerformanceReport> reports)
@@ -121,6 +126,55 @@ public class PerformanceReportService : IPerformanceReportService
         for (var i = 0; i < repeatTimes; i++)
         {
             var elapsedTime = await _reportYearly2Repo.BestSellerInYearAsync(thisYear, 10).GetElapsedTimeAsync();
+            report.ConstraintTimes.Add(elapsedTime);
+        }
+
+        return report;
+    }
+
+    public async Task<PerformanceReport> TopCustomerInYearAsync()
+    {
+        var report = new PerformanceReport
+        {
+            Content = "Top customer this year",
+            ConstraintTimes = new List<long>(),
+            NonConstraintTimes = new List<long>()
+        };
+        var repeatTimes = _configuration.GetValue<int>("TestRepeatTimes");
+
+        var thisYear = DateTime.Now.Year;
+        for (var i = 0; i < repeatTimes; i++)
+        {
+            var elapsedTime = await _reportYearlyRepo.TopCustomerInYearAsync(thisYear, 10).GetElapsedTimeAsync();
+            report.NonConstraintTimes.Add(elapsedTime);
+        }
+        for (var i = 0; i < repeatTimes; i++)
+        {
+            var elapsedTime = await _reportYearly2Repo.TopCustomerInYearAsync(thisYear, 10).GetElapsedTimeAsync();
+            report.ConstraintTimes.Add(elapsedTime);
+        }
+
+        return report;
+    }
+
+    public async Task<PerformanceReport> SearchProductAsync()
+    {
+        var report = new PerformanceReport
+        {
+            Content = "Search product",
+            ConstraintTimes = new List<long>(),
+            NonConstraintTimes = new List<long>()
+        };
+        var repeatTimes = _configuration.GetValue<int>("TestRepeatTimes");
+
+        for (var i = 0; i < repeatTimes; i++)
+        {
+            var elapsedTime = await _productRepo.SearchAsync("Chicken", 0, 20).GetElapsedTimeAsync();
+            report.NonConstraintTimes.Add(elapsedTime);
+        }
+        for (var i = 0; i < repeatTimes; i++)
+        {
+            var elapsedTime = await _product2Repo.SearchAsync("Chicken", 0, 20).GetElapsedTimeAsync();
             report.ConstraintTimes.Add(elapsedTime);
         }
 

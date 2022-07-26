@@ -54,6 +54,10 @@ public class Worker : BackgroundService
         reports.Add(report);
         report = await performanceReportService.BestSellerProductInYearAsync();
         reports.Add(report);
+        report = await performanceReportService.TopCustomerInYearAsync();
+        reports.Add(report);
+        report = await performanceReportService.SearchProductAsync();
+        reports.Add(report);
         
         _logger.LogInformation("Creating reports");
         var filePath = await performanceReportService.WriteToFileAsync(reports);

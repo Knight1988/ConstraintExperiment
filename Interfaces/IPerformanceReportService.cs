@@ -8,4 +8,6 @@ public interface IPerformanceReportService
     Task<PerformanceReport> RevenueLastMonthAsync();
     Task<PerformanceReport> RevenueInYearAsync();
     Task<PerformanceReport> BestSellerProductInYearAsync();
+    Task<PerformanceReport> TopCustomerInYearAsync();
+    Task<PerformanceReport> SearchProductAsync();
 }
