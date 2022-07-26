@@ -1,6 +1,6 @@
 ﻿namespace ConstraintExperiment.Commons;
 
-public class Constants
+public static class Constants
 {
-    public const int BatchSize = 1000;
+    public const int BatchSize = 10000;
 }
