@@ -5,7 +5,7 @@ namespace ConstraintExperiment.Models.NonConstraint;
 
 public class Product
 {
-    [Key]
+    [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }
     public int CategoryId { get; set; }
     public string Name { get; set; }

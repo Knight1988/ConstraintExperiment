@@ -17,16 +17,19 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        _logger.LogInformation("Migrate Database");
         using var scope = _scopeFactory.CreateScope();
         var constraintContext = scope.ServiceProvider.GetRequiredService<ConstraintContext>();
         var nonConstraintContext = scope.ServiceProvider.GetRequiredService<NonConstraintContext>();
         var dataGenerateService = scope.ServiceProvider.GetRequiredService<IDataGenerateService>();
         
+        _logger.LogInformation("Migrate Database");
         await constraintContext.Database.MigrateAsync(cancellationToken: stoppingToken);
         await nonConstraintContext.Database.MigrateAsync(cancellationToken: stoppingToken);
 
+        _logger.LogInformation("Truncate Db");
         await dataGenerateService.TruncateDatabaseAsync();
+        
+        _logger.LogInformation("Insert customers");
         await dataGenerateService.FakeCustomerAsync();
         
         Environment.Exit(0);

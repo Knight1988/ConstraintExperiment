@@ -10,10 +10,12 @@ public class DataGenerateService : IDataGenerateService
 {
     private readonly IConfiguration _configuration;
     private readonly ICustomer2Repo _customer2Repo;
+    private readonly ICustomerRepo _customerRepo;
 
-    public DataGenerateService(IConfiguration configuration, ICustomer2Repo customer2Repo)
+    public DataGenerateService(IConfiguration configuration, ICustomerRepo customerRepo, ICustomer2Repo customer2Repo)
     {
         _configuration = configuration;
+        _customerRepo = customerRepo;
         _customer2Repo = customer2Repo;
     }
     
@@ -26,13 +28,24 @@ public class DataGenerateService : IDataGenerateService
             .RuleFor(p => p.Name, f => f.Name.FullName());
 
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
-        var leftOver = count - chunks * Constants.BatchSize;
+        var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        for (int i = 0; i < chunks; i++)
+        List<Customer2>? customers;
+        for (var i = 0; i < chunks; i++)
         {
-            var customers = fakeCustomer.Generate(Constants.BatchSize);
+            customers = fakeCustomer.Generate(Constants.BatchSize);
             await _customer2Repo.InsertRangeAsync(customers);
+            await _customerRepo.InsertRangeAsync(customers);
         }
+        
+        customers = fakeCustomer.Generate(leftOver);
+        await _customer2Repo.InsertRangeAsync(customers);
+        await _customerRepo.InsertRangeAsync(customers);
+    }
+
+    public Task FakeProductAsync()
+    {
+        throw new NotImplementedException();
     }
 
     public async Task TruncateDatabaseAsync()
