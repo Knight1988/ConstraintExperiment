@@ -5,9 +5,9 @@ namespace ConstraintExperiment.Repositories.NonConstraint;
 
 public class ReportMonthRepo : IReportMonthRepo
 {
-    private readonly ConstraintContext _context;
+    private readonly NonConstraintContext _context;
 
-    public ReportMonthRepo(ConstraintContext context)
+    public ReportMonthRepo(NonConstraintContext context)
     {
         _context = context;
     }
