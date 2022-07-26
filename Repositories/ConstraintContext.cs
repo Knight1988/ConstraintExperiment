@@ -20,8 +20,11 @@ public class ConstraintContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
+        var connectionString = _configuration.GetConnectionString("ConstraintDb");
+        var contextTimeout = _configuration.GetValue<int>("ContextTimeout");
         // connect to sql server with connection string from app settings
-        options.UseSqlServer(_configuration.GetConnectionString("ConstraintDb"));
+        options.UseSqlServer(connectionString, builder => 
+            builder.CommandTimeout(contextTimeout));
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

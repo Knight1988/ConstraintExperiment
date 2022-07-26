@@ -20,7 +20,10 @@ public class NonConstraintContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
+        var connectionString = _configuration.GetConnectionString("NonConstraintDb");
+        var contextTimeout = _configuration.GetValue<int>("ContextTimeout");
         // connect to sql server with connection string from app settings
-        options.UseSqlServer(_configuration.GetConnectionString("NonConstraintDb"));
+        options.UseSqlServer(connectionString, builder => 
+            builder.CommandTimeout(contextTimeout));
     }
 }
