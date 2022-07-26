@@ -24,6 +24,8 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddScoped<IProduct2Repo, Product2Repo>();
         services.AddScoped<IProductCategoryRepo, ProductCategoryRepo>();
         services.AddScoped<IProductCategory2Repo, ProductCategory2Repo>();
+        services.AddScoped<IOrderRepo, OrderRepo>();
+        services.AddScoped<IOrder2Repo, Order2Repo>();
     })
     .Build();
 
