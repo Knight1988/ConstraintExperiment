@@ -89,6 +89,7 @@ public class DataGenerateService : IDataGenerateService
             .RuleFor(p => p.Id, f => productId++)
             .RuleFor(p => p.CategoryId, f => f.Random.Int(1, productCategoryCount))
             .RuleFor(p => p.Name, f => f.Commerce.ProductName())
+            .RuleFor(p => p.Price, f => f.Random.Int(1, 100))
             .RuleFor(p => p.Description, f => f.Commerce.ProductDescription());
 
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
