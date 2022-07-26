@@ -115,12 +115,12 @@ public class PerformanceReportService : IPerformanceReportService
         var thisYear = DateTime.Now.Year;
         for (var i = 0; i < repeatTimes; i++)
         {
-            var elapsedTime = await _reportYearlyRepo.RevenueInYearAsync(thisYear).GetElapsedTimeAsync();
+            var elapsedTime = await _reportYearlyRepo.BestSellerInYearAsync(thisYear, 10).GetElapsedTimeAsync();
             report.NonConstraintTimes.Add(elapsedTime);
         }
         for (var i = 0; i < repeatTimes; i++)
         {
-            var elapsedTime = await _reportYearly2Repo.RevenueInYearAsync(thisYear).GetElapsedTimeAsync();
+            var elapsedTime = await _reportYearly2Repo.BestSellerInYearAsync(thisYear, 10).GetElapsedTimeAsync();
             report.ConstraintTimes.Add(elapsedTime);
         }
 
