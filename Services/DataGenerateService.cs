@@ -1,6 +1,8 @@
 ﻿using Bogus;
 using ConstraintExperiment.Commons;
 using ConstraintExperiment.Interfaces;
+using ConstraintExperiment.Interfaces.Constraint;
+using ConstraintExperiment.Interfaces.NonConstraint;
 using ConstraintExperiment.Models.Constraint;
 using ConstraintExperiment.Repositories;
 

@@ -1,6 +1,10 @@
 using ConstraintExperiment;
 using ConstraintExperiment.Interfaces;
+using ConstraintExperiment.Interfaces.Constraint;
+using ConstraintExperiment.Interfaces.NonConstraint;
 using ConstraintExperiment.Repositories;
+using ConstraintExperiment.Repositories.Constraint;
+using ConstraintExperiment.Repositories.NonConstraint;
 using ConstraintExperiment.Services;
 using Microsoft.EntityFrameworkCore;
 

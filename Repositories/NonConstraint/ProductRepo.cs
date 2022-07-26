@@ -1,6 +1,7 @@
-﻿using ConstraintExperiment.Models.NonConstraint;
+﻿using ConstraintExperiment.Interfaces.NonConstraint;
+using ConstraintExperiment.Models.NonConstraint;
 
-namespace ConstraintExperiment.Repositories;
+namespace ConstraintExperiment.Repositories.NonConstraint;
 
 public class ProductRepo: BaseRepo<Product>, IProductRepo
 {

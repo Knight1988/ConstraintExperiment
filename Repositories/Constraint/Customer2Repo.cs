@@ -1,8 +1,7 @@
-﻿using ConstraintExperiment.Interfaces;
+﻿using ConstraintExperiment.Interfaces.Constraint;
 using ConstraintExperiment.Models.Constraint;
-using Microsoft.EntityFrameworkCore;
 
-namespace ConstraintExperiment.Repositories;
+namespace ConstraintExperiment.Repositories.Constraint;
 
 public class Customer2Repo: BaseRepo<Customer2>, ICustomer2Repo
 {

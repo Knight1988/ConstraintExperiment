@@ -1,7 +1,7 @@
-﻿using ConstraintExperiment.Interfaces;
+﻿using ConstraintExperiment.Interfaces.Constraint;
 using ConstraintExperiment.Models.Constraint;
 
-namespace ConstraintExperiment.Repositories;
+namespace ConstraintExperiment.Repositories.Constraint;
 
 public class Product2Repo: BaseRepo<Product2>, IProduct2Repo
 {
