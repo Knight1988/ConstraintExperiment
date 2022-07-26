@@ -32,6 +32,9 @@ public class Worker : BackgroundService
         _logger.LogInformation("Insert customers");
         await dataGenerateService.FakeCustomerAsync();
         
+        _logger.LogInformation("Insert product categories");
+        await dataGenerateService.FakeProductCategoryAsync();
+        
         _logger.LogInformation("Insert products");
         await dataGenerateService.FakeProductAsync();
         

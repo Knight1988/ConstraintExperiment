@@ -4,7 +4,6 @@ using ConstraintExperiment.Interfaces;
 using ConstraintExperiment.Interfaces.Constraint;
 using ConstraintExperiment.Interfaces.NonConstraint;
 using ConstraintExperiment.Models.Constraint;
-using ConstraintExperiment.Repositories;
 
 namespace ConstraintExperiment.Services;
 
@@ -15,10 +14,13 @@ public class DataGenerateService : IDataGenerateService
     private readonly ICustomerRepo _customerRepo;
     private readonly IProductRepo _productRepo;
     private readonly IProduct2Repo _product2Repo;
+    private readonly IProductCategoryRepo _productCategoryRepo;
+    private readonly IProductCategory2Repo _productCategory2Repo;
 
     public DataGenerateService(IConfiguration configuration, 
         ICustomerRepo customerRepo, ICustomer2Repo customer2Repo,
-        IProductRepo productRepo, IProduct2Repo product2Repo
+        IProductRepo productRepo, IProduct2Repo product2Repo,
+        IProductCategoryRepo productCategoryRepo, IProductCategory2Repo productCategory2Repo
         )
     {
         _configuration = configuration;
@@ -26,6 +28,8 @@ public class DataGenerateService : IDataGenerateService
         _customer2Repo = customer2Repo;
         _productRepo = productRepo;
         _product2Repo = product2Repo;
+        _productCategoryRepo = productCategoryRepo;
+        _productCategory2Repo = productCategory2Repo;
     }
     
     public async Task FakeCustomerAsync()
@@ -52,12 +56,38 @@ public class DataGenerateService : IDataGenerateService
         await _customerRepo.InsertRangeAsync(customers);
     }
 
+    public async Task FakeProductCategoryAsync()
+    {
+        var productCategoryId = 1;
+        var count = _configuration.GetValue<double>("Fakes:ProductCategoryCount");
+        var fakeProductCategory = new Faker<ProductCategory2>()
+            .RuleFor(p => p.Id, f => productCategoryId++)
+            .RuleFor(p => p.Name, f => f.Commerce.Categories(1)[0]);
+
+        var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
+        var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
+
+        List<ProductCategory2>? productCategories;
+        for (var i = 0; i < chunks; i++)
+        {
+            productCategories = fakeProductCategory.Generate(Constants.BatchSize);
+            await _productCategory2Repo.InsertRangeAsync(productCategories);
+            await _productCategoryRepo.InsertRangeAsync(productCategories);
+        }
+        
+        productCategories = fakeProductCategory.Generate(leftOver);
+        await _productCategory2Repo.InsertRangeAsync(productCategories);
+        await _productCategoryRepo.InsertRangeAsync(productCategories);
+    }
+
     public async Task FakeProductAsync()
     {
         var productId = 1;
         var count = _configuration.GetValue<double>("Fakes:ProductCount");
+        var productCategoryCount = _configuration.GetValue<int>("Fakes:ProductCategoryCount");
         var fakeProduct = new Faker<Product2>()
             .RuleFor(p => p.Id, f => productId++)
+            .RuleFor(p => p.CategoryId, f => f.Random.Int(1, productCategoryCount))
             .RuleFor(p => p.Name, f => f.Commerce.ProductName())
             .RuleFor(p => p.Description, f => f.Commerce.ProductDescription());
 
@@ -81,5 +111,9 @@ public class DataGenerateService : IDataGenerateService
     {
         await _customerRepo.TruncateAsync();
         await _customer2Repo.TruncateAsync();
+        await _productRepo.TruncateAsync();
+        await _product2Repo.TruncateAsync();
+        await _productCategoryRepo.TruncateAsync();
+        await _productCategory2Repo.TruncateAsync();
     }
 }
