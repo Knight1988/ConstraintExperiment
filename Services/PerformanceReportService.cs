@@ -44,13 +44,21 @@ public class PerformanceReportService : IPerformanceReportService
 
         foreach (var report in reports)
         {
+            var totalConstraint = 0d;
+            var totalNonConstraint = 0d;
             await file.WriteLineAsync("|Test case|Constraint|Non Constraint|");
             await file.WriteLineAsync("|--|--|--|");
             var repeatTime = _configuration.GetValue<int>("TestRepeatTimes");
             for (var i = 0; i < repeatTime; i++)
             {
+                totalConstraint += report.ConstraintTimes[i];
+                totalNonConstraint += report.NonConstraintTimes[i];
                 await file.WriteLineAsync($"|{report.Content}|{report.ConstraintTimes[i]}|{report.NonConstraintTimes[i]}|");
             }
+
+            var avgConstraint = totalConstraint / repeatTime;
+            var avgNonConstraint = totalNonConstraint / repeatTime;
+            await file.WriteLineAsync($"|Avg|{avgConstraint}|{avgNonConstraint}|");
             await file.WriteLineAsync(string.Empty);
         }
 
