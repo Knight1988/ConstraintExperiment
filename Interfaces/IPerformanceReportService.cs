@@ -5,4 +5,5 @@ namespace ConstraintExperiment.Interfaces;
 public interface IPerformanceReportService
 {
     Task<PerformanceReport> RevenueLastMonthAsync();
+    Task<PerformanceReport> RevenueInYearAsync();
 }
