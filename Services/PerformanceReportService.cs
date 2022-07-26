@@ -26,20 +26,20 @@ public class PerformanceReportService : IPerformanceReportService
         var report = new PerformanceReport
         {
             Content = "Get revenue last month",
-            ConstaintTimes = new List<long>(),
-            NonConstaintTimes = new List<long>()
+            ConstraintTimes = new List<long>(),
+            NonConstraintTimes = new List<long>()
         };
         var repeatTimes = _configuration.GetValue<int>("TestRepeatTimes");
 
         for (var i = 0; i < repeatTimes; i++)
         {
             var elapsedTime = await _reportMonthRepo.RevenueMonthlyAsync(3).GetElapsedTimeAsync();
-            report.NonConstaintTimes.Add(elapsedTime);
+            report.NonConstraintTimes.Add(elapsedTime);
         }
         for (var i = 0; i < repeatTimes; i++)
         {
             var elapsedTime = await _reportMonth2Repo.RevenueMonthlyAsync(3).GetElapsedTimeAsync();
-            report.ConstaintTimes.Add(elapsedTime);
+            report.ConstraintTimes.Add(elapsedTime);
         }
 
         return report;

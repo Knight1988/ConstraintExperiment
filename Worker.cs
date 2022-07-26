@@ -48,11 +48,11 @@ public class Worker : BackgroundService
         _logger.LogInformation("Start calculate performance");
         var report = await performanceReportService.RevenueLastMonthAsync();
         _logger.LogInformation("Content: {Content}", report.Content);
-        foreach (var constraintTime in report.ConstaintTimes)
+        foreach (var constraintTime in report.ConstraintTimes)
         {
             _logger.LogInformation("Constraint: {Content}", constraintTime);
         }
-        foreach (var nonConstraintTime in report.NonConstaintTimes)
+        foreach (var nonConstraintTime in report.NonConstraintTimes)
         {
             _logger.LogInformation("Non Constraint: {Content}", nonConstraintTime);
         }

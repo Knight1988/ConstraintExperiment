@@ -3,6 +3,6 @@
 public class PerformanceReport
 {
     public string Content { get; set; }
-    public List<long> ConstaintTimes { get; set; }
-    public List<long> NonConstaintTimes { get; set; }
+    public List<long> ConstraintTimes { get; set; }
+    public List<long> NonConstraintTimes { get; set; }
 }
