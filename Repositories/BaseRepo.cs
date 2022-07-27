@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EFCore.BulkExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Repositories;
 
@@ -15,10 +16,9 @@ public abstract class BaseRepo<T> where T : class
         _tableName = tableName;
     }
     
-    public async Task InsertRangeAsync(IEnumerable<T> objs)
+    public async Task InsertRangeAsync(IList<T> objs)
     {
-        await _dbSet.AddRangeAsync(objs);
-        await _context.SaveChangesAsync();
+        await _context.BulkInsertAsync(objs);
     }
 
     public async Task TruncateAsync()

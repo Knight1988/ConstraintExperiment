@@ -48,15 +48,15 @@ public class Worker : BackgroundService
         
         _logger.LogInformation("Start calculate performance");
         var reports = new List<PerformanceReport>();
-        var report = await performanceReportService.RevenueLastMonthAsync();
+        var report = await performanceReportService.SearchProductAsync();
+        reports.Add(report);
+        report = await performanceReportService.RevenueLastMonthAsync();
         reports.Add(report);
         report = await performanceReportService.RevenueInYearAsync();
         reports.Add(report);
         report = await performanceReportService.BestSellerProductInYearAsync();
         reports.Add(report);
         report = await performanceReportService.TopCustomerInYearAsync();
-        reports.Add(report);
-        report = await performanceReportService.SearchProductAsync();
         reports.Add(report);
         
         _logger.LogInformation("Creating reports");

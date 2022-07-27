@@ -1,7 +1,7 @@
 ﻿namespace ConstraintExperiment.Interfaces;
 
-public interface IBaseRepo<in T>
+public interface IBaseRepo<T>
 {
-    Task InsertRangeAsync(IEnumerable<T> customers);
+    Task InsertRangeAsync(IList<T> customers);
     Task TruncateAsync();
 }
