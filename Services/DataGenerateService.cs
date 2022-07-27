@@ -7,6 +7,8 @@ using ConstraintExperiment.Models.Constraint;
 using ConstraintExperiment.Models.NonConstraint;
 using ConstraintExperiment.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ConstraintExperiment.Services;
 
@@ -219,17 +221,9 @@ public class DataGenerateService : IDataGenerateService
         _logger.LogInformation("Insert order details: {Percent:P}", 1);
     }
 
-    public async Task TruncateDatabaseAsync()
+    public async Task TearDownDatabaseAsync()
     {
-        await _customerRepo.TruncateAsync();
-        await _customer2Repo.TruncateAsync();
-        await _productRepo.TruncateAsync();
-        await _product2Repo.TruncateAsync();
-        await _productCategoryRepo.TruncateAsync();
-        await _productCategory2Repo.TruncateAsync();
-        await _orderRepo.TruncateAsync();
-        await _order2Repo.TruncateAsync();
-        await _orderDetailRepo.TruncateAsync();
-        await _orderDetail2Repo.TruncateAsync();
+        await _constraintContext.GetInfrastructure().GetService<IMigrator>().MigrateAsync("0");
+        await _nonConstraintContext.GetInfrastructure().GetService<IMigrator>().MigrateAsync("0");
     }
 }

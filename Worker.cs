@@ -19,11 +19,11 @@ public class Worker : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+        _logger.LogInformation("Teardown Database");
+        await _dataGenerateService.TearDownDatabaseAsync();
+        
         _logger.LogInformation("Migrate Database");
         await _dataGenerateService.MigrateDatabaseAsync();
-        
-        _logger.LogInformation("Truncate Db");
-        await _dataGenerateService.TruncateDatabaseAsync();
         
         _logger.LogInformation("Insert customers");
         await _dataGenerateService.FakeCustomerAsync();
