@@ -36,9 +36,11 @@ public class PerformanceReportService : IPerformanceReportService
         await using StreamWriter file = new(fileName);
         await file.WriteLineAsync("## Performance Test Report");
         await file.WriteLineAsync(string.Empty);
-        await file.WriteLineAsync($"Customer: {_configuration.GetValue<int>("Fakes:CustomerCount")}");
-        await file.WriteLineAsync($"Product: {_configuration.GetValue<int>("Fakes:ProductCount")}");
-        await file.WriteLineAsync($"Order: {_configuration.GetValue<int>("Fakes:OrderCount")}");
+        await file.WriteLineAsync($"Customer: {_configuration.GetValue<int>("Fakes:CustomerCount"):N0}");
+        await file.WriteLineAsync(string.Empty);
+        await file.WriteLineAsync($"Product: {_configuration.GetValue<int>("Fakes:ProductCount"):N0}");
+        await file.WriteLineAsync(string.Empty);
+        await file.WriteLineAsync($"Order: {_configuration.GetValue<int>("Fakes:OrderCount"):N0}");
         await file.WriteLineAsync(string.Empty);
 
         foreach (var report in reports)
