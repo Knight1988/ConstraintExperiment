@@ -1,9 +1,10 @@
-﻿using EFCore.BulkExtensions;
+﻿using ConstraintExperiment.Interfaces;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Repositories;
 
-public abstract class BaseRepo<T> where T : class
+public abstract class BaseRepo<T> : IBaseRepo<T> where T : class, IBaseModel
 {
     private readonly DbSet<T> _dbSet;
     private readonly string _tableName;
@@ -16,13 +17,31 @@ public abstract class BaseRepo<T> where T : class
         _tableName = tableName;
     }
     
+    public async Task<T?> GetByIdAsync(int id)
+    {
+        return await _dbSet.SingleOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task InsertAsync(T obj)
+    {
+        await _context.AddAsync(obj);
+        await _context.SaveChangesAsync();
+    }
+    
     public async Task InsertRangeAsync(IList<T> objs)
     {
         await _context.BulkInsertAsync(objs);
     }
 
-    public async Task TruncateAsync()
+    public async Task UpdateAsync(T obj)
     {
-        await _context.Database.ExecuteSqlRawAsync("DELETE FROM " + _tableName);
+        _context.Update(obj);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteAsync(T obj)
+    {
+        _context.Remove(obj);
+        await _context.SaveChangesAsync();
     }
 }

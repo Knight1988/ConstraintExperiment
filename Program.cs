@@ -16,6 +16,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddDbContext<NonConstraintContext>(ServiceLifetime.Transient);
         services.AddDbContext<ConstraintContext>(ServiceLifetime.Transient);
 
+        services.AddSingleton<IFakerService, FakerService>();
         services.AddSingleton<IDataGenerateService, DataGenerateService>();
         services.AddSingleton<IPerformanceReportService, PerformanceReportService>();
         

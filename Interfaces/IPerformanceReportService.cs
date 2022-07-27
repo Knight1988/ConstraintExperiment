@@ -10,4 +10,7 @@ public interface IPerformanceReportService
     Task<PerformanceReport> BestSellerProductInYearAsync();
     Task<PerformanceReport> TopCustomerInYearAsync();
     Task<PerformanceReport> SearchProductAsync();
+    Task<PerformanceReport> InsertCustomerAsync();
+    Task<PerformanceReport> UpdateCustomerAsync();
+    Task<PerformanceReport> DeleteCustomerAsync();
 }

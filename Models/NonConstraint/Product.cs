@@ -1,9 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ConstraintExperiment.Interfaces;
 
 namespace ConstraintExperiment.Models.NonConstraint;
 
-public class Product
+public class Product : IBaseModel
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int Id { get; set; }

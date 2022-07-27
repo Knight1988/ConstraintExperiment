@@ -28,8 +28,10 @@ public class DataGenerateService : IDataGenerateService
     private readonly ILogger<DataGenerateService> _logger;
     private readonly ConstraintContext _constraintContext;
     private readonly NonConstraintContext _nonConstraintContext;
+    private readonly IFakerService _fakerService;
 
     public DataGenerateService(IConfiguration configuration, ILogger<DataGenerateService> logger,
+        IFakerService fakerService,
         ConstraintContext constraintContext, NonConstraintContext nonConstraintContext,
         ICustomerRepo customerRepo, ICustomer2Repo customer2Repo,
         IProductRepo productRepo, IProduct2Repo product2Repo,
@@ -40,6 +42,7 @@ public class DataGenerateService : IDataGenerateService
     {
         _logger = logger;
         _configuration = configuration;
+        _fakerService = fakerService;
         _constraintContext = constraintContext;
         _nonConstraintContext = nonConstraintContext;
         _customerRepo = customerRepo;
@@ -62,28 +65,24 @@ public class DataGenerateService : IDataGenerateService
 
     public async Task FakeCustomerAsync()
     {
-        var customerId = 1;
         var count = _configuration.GetValue<double>("Fakes:CustomerCount");
-        var fakeCustomer = new Faker<Customer2>()
-            .RuleFor(p => p.Id, _ => customerId++)
-            .RuleFor(p => p.Name, f => f.Name.FullName());
 
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Customer2>? customers2;
-        List<Customer>? customers;
+        List<Customer2> customers2;
+        List<Customer> customers;
         _logger.LogInformation("Insert customer: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
-            customers2 = fakeCustomer.Generate(Constants.BatchSize);
+            customers2 = _fakerService.GenerateCustomer(Constants.BatchSize);
             customers = customers2.ConvertAll(p => (Customer)p);
             await _customer2Repo.InsertRangeAsync(customers2);
             await _customerRepo.InsertRangeAsync(customers);
             _logger.LogInformation("Insert customer: {Percent:P}", (double) i / chunks);
         }
         
-        customers2 = fakeCustomer.Generate(leftOver);
+        customers2 = _fakerService.GenerateCustomer(leftOver);
         customers = customers2.ConvertAll(p => (Customer)p);
         await _customer2Repo.InsertRangeAsync(customers2);
         await _customerRepo.InsertRangeAsync(customers);
@@ -101,8 +100,8 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<ProductCategory2>? productCategories2;
-        List<ProductCategory>? productCategories;
+        List<ProductCategory2> productCategories2;
+        List<ProductCategory> productCategories;
         _logger.LogInformation("Insert product categories: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
@@ -135,8 +134,8 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Product2>? products2;
-        List<Product>? products;
+        List<Product2> products2;
+        List<Product> products;
         _logger.LogInformation("Insert products: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
@@ -167,8 +166,8 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Order2>? orders2;
-        List<Order>? orders;
+        List<Order2> orders2;
+        List<Order> orders;
         _logger.LogInformation("Insert orders: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
