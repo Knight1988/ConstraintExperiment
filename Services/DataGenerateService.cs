@@ -69,21 +69,21 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Customer2>? customer2s;
+        List<Customer2>? customers2;
         List<Customer>? customers;
         _logger.LogInformation("Insert customer: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
-            customer2s = fakeCustomer.Generate(Constants.BatchSize);
-            customers = customer2s.ConvertAll(p => (Customer)p);
-            await _customer2Repo.InsertRangeAsync(customer2s);
+            customers2 = fakeCustomer.Generate(Constants.BatchSize);
+            customers = customers2.ConvertAll(p => (Customer)p);
+            await _customer2Repo.InsertRangeAsync(customers2);
             await _customerRepo.InsertRangeAsync(customers);
             _logger.LogInformation("Insert customer: {Percent:P}", (double) i / chunks);
         }
         
-        customer2s = fakeCustomer.Generate(leftOver);
-        customers = customer2s.ConvertAll(p => (Customer)p);
-        await _customer2Repo.InsertRangeAsync(customer2s);
+        customers2 = fakeCustomer.Generate(leftOver);
+        customers = customers2.ConvertAll(p => (Customer)p);
+        await _customer2Repo.InsertRangeAsync(customers2);
         await _customerRepo.InsertRangeAsync(customers);
         _logger.LogInformation("Insert customer: {Percent:P}", 1);
     }
@@ -99,21 +99,21 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<ProductCategory2>? productCategory2s;
+        List<ProductCategory2>? productCategories2;
         List<ProductCategory>? productCategories;
         _logger.LogInformation("Insert product categories: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
-            productCategory2s = fakeProductCategory.Generate(Constants.BatchSize);
-            productCategories = productCategory2s.ConvertAll(p => (ProductCategory) p);
-            await _productCategory2Repo.InsertRangeAsync(productCategory2s);
+            productCategories2 = fakeProductCategory.Generate(Constants.BatchSize);
+            productCategories = productCategories2.ConvertAll(p => (ProductCategory) p);
+            await _productCategory2Repo.InsertRangeAsync(productCategories2);
             await _productCategoryRepo.InsertRangeAsync(productCategories);
             _logger.LogInformation("Insert product categories: {Percent:P}", (double) i / chunks);
         }
         
-        productCategory2s = fakeProductCategory.Generate(leftOver);
-        productCategories = productCategory2s.ConvertAll(p => (ProductCategory) p);
-        await _productCategory2Repo.InsertRangeAsync(productCategory2s);
+        productCategories2 = fakeProductCategory.Generate(leftOver);
+        productCategories = productCategories2.ConvertAll(p => (ProductCategory) p);
+        await _productCategory2Repo.InsertRangeAsync(productCategories2);
         await _productCategoryRepo.InsertRangeAsync(productCategories);
         _logger.LogInformation("Insert product categories: {Percent:P}", 1);
     }
@@ -133,21 +133,21 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Product2>? product2s;
+        List<Product2>? products2;
         List<Product>? products;
         _logger.LogInformation("Insert products: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
-            product2s = fakeProduct.Generate(Constants.BatchSize);
-            products = product2s.ConvertAll(p => (Product)p);
-            await _product2Repo.InsertRangeAsync(product2s);
+            products2 = fakeProduct.Generate(Constants.BatchSize);
+            products = products2.ConvertAll(p => (Product)p);
+            await _product2Repo.InsertRangeAsync(products2);
             await _productRepo.InsertRangeAsync(products);
             _logger.LogInformation("Insert products: {Percent:P}", (double) i / chunks);
         }
         
-        product2s = fakeProduct.Generate(leftOver);
-        products = product2s.ConvertAll(p => (Product)p);
-        await _product2Repo.InsertRangeAsync(product2s);
+        products2 = fakeProduct.Generate(leftOver);
+        products = products2.ConvertAll(p => (Product)p);
+        await _product2Repo.InsertRangeAsync(products2);
         await _productRepo.InsertRangeAsync(products);
         _logger.LogInformation("Insert products: {Percent:P}", 1);
     }
@@ -165,21 +165,21 @@ public class DataGenerateService : IDataGenerateService
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
 
-        List<Order2>? order2s;
+        List<Order2>? orders2;
         List<Order>? orders;
         _logger.LogInformation("Insert orders: {Percent:P}", 0);
         for (var i = 0; i < chunks; i++)
         {
-            order2s = fakeOrder.Generate(Constants.BatchSize);
-            orders = order2s.ConvertAll(p => (Order)p);
-            await _order2Repo.InsertRangeAsync(order2s);
+            orders2 = fakeOrder.Generate(Constants.BatchSize);
+            orders = orders2.ConvertAll(p => (Order)p);
+            await _order2Repo.InsertRangeAsync(orders2);
             await _orderRepo.InsertRangeAsync(orders);
             _logger.LogInformation("Insert orders: {Percent:P}", (double) i / chunks);
         }
         
-        order2s = fakeOrder.Generate(leftOver);
-        orders = order2s.ConvertAll(p => (Order)p);
-        await _order2Repo.InsertRangeAsync(order2s);
+        orders2 = fakeOrder.Generate(leftOver);
+        orders = orders2.ConvertAll(p => (Order)p);
+        await _order2Repo.InsertRangeAsync(orders2);
         await _orderRepo.InsertRangeAsync(orders);
         _logger.LogInformation("Insert orders: {Percent:P}", 1);
     }
@@ -197,24 +197,24 @@ public class DataGenerateService : IDataGenerateService
             .RuleFor(p => p.Quantity, f => f.Random.Int(1, 10));
 
         _logger.LogInformation("Insert order details: {Percent:P}", 0);
-        var orderDetail2s = new List<OrderDetail2>();
-        var orderDetails = new List<OrderDetail>();
+        var orderDetails2 = new List<OrderDetail2>();
+        List<OrderDetail> orderDetails;
         var faker = new Faker();
         for (orderId = 1; orderId <= count; orderId++)
         {
-            orderDetail2s.AddRange(fakeOrderDetail.Generate(faker.Random.Int(1, 10)));
+            orderDetails2.AddRange(fakeOrderDetail.Generate(faker.Random.Int(1, 10)));
 
             if (orderId % Constants.BatchSize != 0) continue;
 
-            orderDetails = orderDetail2s.ConvertAll(p => (OrderDetail) p);
-            await _orderDetail2Repo.InsertRangeAsync(orderDetail2s);
+            orderDetails = orderDetails2.ConvertAll(p => (OrderDetail) p);
+            await _orderDetail2Repo.InsertRangeAsync(orderDetails2);
             await _orderDetailRepo.InsertRangeAsync(orderDetails);
-            orderDetail2s = new List<OrderDetail2>();
+            orderDetails2 = new List<OrderDetail2>();
             _logger.LogInformation("Insert order details: {Percent:P}", orderId / count);
         }
         
-        orderDetails = orderDetail2s.ConvertAll(p => (OrderDetail) p);
-        await _orderDetail2Repo.InsertRangeAsync(orderDetail2s);
+        orderDetails = orderDetails2.ConvertAll(p => (OrderDetail) p);
+        await _orderDetail2Repo.InsertRangeAsync(orderDetails2);
         await _orderDetailRepo.InsertRangeAsync(orderDetails);
         _logger.LogInformation("Insert order details: {Percent:P}", 1);
     }
