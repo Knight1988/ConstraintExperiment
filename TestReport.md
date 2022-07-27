@@ -6,48 +6,38 @@ Product: 100,000
 
 Order: 1,000,000
 
-|Test case|Constraint|Non Constraint|
-|--|--|--|
-|Search Product|4|4|
-|Search Product|3|3|
-|Search Product|3|3|
-|Search Product|3|3|
-|Search Product|3|4|
-|Avg|3.2|3.4|
+Bellow is test performance report. Lower is better
 
 |Test case|Constraint|Non Constraint|
 |--|--|--|
-|Get revenue last month|211|241|
-|Get revenue last month|215|222|
-|Get revenue last month|203|234|
-|Get revenue last month|190|248|
-|Get revenue last month|194|237|
-|Avg|202.6|236.4|
-
-|Test case|Constraint|Non Constraint|
-|--|--|--|
-|Get revenue this year|291|285|
-|Get revenue this year|284|289|
-|Get revenue this year|276|338|
-|Get revenue this year|338|322|
-|Get revenue this year|316|324|
-|Avg|301|311.6|
-
-|Test case|Constraint|Non Constraint|
-|--|--|--|
-|Best seller product this year|367|333|
-|Best seller product this year|358|450|
-|Best seller product this year|330|337|
-|Best seller product this year|443|324|
-|Best seller product this year|383|376|
-|Avg|376.2|364|
-
-|Test case|Constraint|Non Constraint|
-|--|--|--|
-|Top customer this year|432|482|
-|Top customer this year|440|438|
-|Top customer this year|491|422|
-|Top customer this year|439|492|
-|Top customer this year|439|502|
-|Avg|448.2|467.2|
+|Search Product|5ms|5ms|
+|Search Product|6ms|4ms|
+|Search Product|6ms|4ms|
+|Search Product|4ms|5ms|
+|Search Product|5ms|5ms|
+|Avg|5.2ms|4.6ms|
+|Get revenue last month|275ms|318ms|
+|Get revenue last month|331ms|310ms|
+|Get revenue last month|346ms|285ms|
+|Get revenue last month|348ms|295ms|
+|Get revenue last month|317ms|257ms|
+|Avg|323.4ms|293ms|
+|Get revenue this year|408ms|526ms|
+|Get revenue this year|442ms|387ms|
+|Get revenue this year|515ms|505ms|
+|Get revenue this year|541ms|441ms|
+|Get revenue this year|419ms|505ms|
+|Avg|465ms|472.8ms|
+|Best seller product this year|453ms|405ms|
+|Best seller product this year|415ms|469ms|
+|Best seller product this year|577ms|438ms|
+|Best seller product this year|488ms|463ms|
+|Best seller product this year|463ms|430ms|
+|Avg|479.2ms|441ms|
+|Top customer this year|538ms|599ms|
+|Top customer this year|607ms|526ms|
+|Top customer this year|475ms|628ms|
+|Top customer this year|616ms|599ms|
+|Top customer this year|569ms|618ms|
+|Avg|561ms|594ms|
 

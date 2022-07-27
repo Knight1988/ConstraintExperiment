@@ -7,4 +7,4 @@ Tests are perform on MS SQL Server 2019
 
 ## Conclution
 
-Query a database with constraint is slightly better.
+There is almost no different between constraint and non constraint.
