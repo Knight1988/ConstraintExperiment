@@ -5,6 +5,8 @@ using ConstraintExperiment.Interfaces.Constraint;
 using ConstraintExperiment.Interfaces.NonConstraint;
 using ConstraintExperiment.Models.Constraint;
 using ConstraintExperiment.Models.NonConstraint;
+using ConstraintExperiment.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Services;
 
@@ -22,8 +24,11 @@ public class DataGenerateService : IDataGenerateService
     private readonly IOrderDetailRepo _orderDetailRepo;
     private readonly IOrderDetail2Repo _orderDetail2Repo;
     private readonly ILogger<DataGenerateService> _logger;
+    private readonly ConstraintContext _constraintContext;
+    private readonly NonConstraintContext _nonConstraintContext;
 
     public DataGenerateService(IConfiguration configuration, ILogger<DataGenerateService> logger,
+        ConstraintContext constraintContext, NonConstraintContext nonConstraintContext,
         ICustomerRepo customerRepo, ICustomer2Repo customer2Repo,
         IProductRepo productRepo, IProduct2Repo product2Repo,
         IProductCategoryRepo productCategoryRepo, IProductCategory2Repo productCategory2Repo,
@@ -33,6 +38,8 @@ public class DataGenerateService : IDataGenerateService
     {
         _logger = logger;
         _configuration = configuration;
+        _constraintContext = constraintContext;
+        _nonConstraintContext = nonConstraintContext;
         _customerRepo = customerRepo;
         _customer2Repo = customer2Repo;
         _productRepo = productRepo;
@@ -44,7 +51,13 @@ public class DataGenerateService : IDataGenerateService
         _orderDetailRepo = orderDetailRepo;
         _orderDetail2Repo = orderDetail2Repo;
     }
-    
+
+    public async Task MigrateDatabaseAsync()
+    {
+        await _constraintContext.Database.MigrateAsync();
+        await _nonConstraintContext.Database.MigrateAsync();
+    }
+
     public async Task FakeCustomerAsync()
     {
         var customerId = 1;

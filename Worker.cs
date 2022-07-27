@@ -1,66 +1,60 @@
 using ConstraintExperiment.Interfaces;
 using ConstraintExperiment.Models;
-using ConstraintExperiment.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly IServiceScopeFactory _scopeFactory;
+    private readonly IDataGenerateService _dataGenerateService;
+    private readonly IPerformanceReportService _performanceReportService;
 
-    public Worker(ILogger<Worker> logger, IServiceScopeFactory scopeFactory)
+    public Worker(ILogger<Worker> logger, IDataGenerateService dataGenerateService, 
+        IPerformanceReportService performanceReportService)
     {
         _logger = logger;
-        _scopeFactory = scopeFactory;
+        _dataGenerateService = dataGenerateService;
+        _performanceReportService = performanceReportService;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        using var scope = _scopeFactory.CreateScope();
-        var constraintContext = scope.ServiceProvider.GetRequiredService<ConstraintContext>();
-        var nonConstraintContext = scope.ServiceProvider.GetRequiredService<NonConstraintContext>();
-        var dataGenerateService = scope.ServiceProvider.GetRequiredService<IDataGenerateService>();
-        var performanceReportService = scope.ServiceProvider.GetRequiredService<IPerformanceReportService>();
-        
         _logger.LogInformation("Migrate Database");
-        await constraintContext.Database.MigrateAsync(cancellationToken: stoppingToken);
-        await nonConstraintContext.Database.MigrateAsync(cancellationToken: stoppingToken);
-
+        await _dataGenerateService.MigrateDatabaseAsync();
+        
         _logger.LogInformation("Truncate Db");
-        await dataGenerateService.TruncateDatabaseAsync();
+        await _dataGenerateService.TruncateDatabaseAsync();
         
         _logger.LogInformation("Insert customers");
-        await dataGenerateService.FakeCustomerAsync();
+        await _dataGenerateService.FakeCustomerAsync();
         
         _logger.LogInformation("Insert product categories");
-        await dataGenerateService.FakeProductCategoryAsync();
+        await _dataGenerateService.FakeProductCategoryAsync();
         
         _logger.LogInformation("Insert products");
-        await dataGenerateService.FakeProductAsync();
+        await _dataGenerateService.FakeProductAsync();
         
         _logger.LogInformation("Insert orders");
-        await dataGenerateService.FakeOrderAsync();
+        await _dataGenerateService.FakeOrderAsync();
         
         _logger.LogInformation("Insert order details");
-        await dataGenerateService.FakeOrderDetailAsync();
+        await _dataGenerateService.FakeOrderDetailAsync();
         
         _logger.LogInformation("Start calculate performance");
         var reports = new List<PerformanceReport>();
-        var report = await performanceReportService.SearchProductAsync();
+        var report = await _performanceReportService.SearchProductAsync();
         reports.Add(report);
-        report = await performanceReportService.RevenueLastMonthAsync();
+        report = await _performanceReportService.RevenueLastMonthAsync();
         reports.Add(report);
-        report = await performanceReportService.RevenueInYearAsync();
+        report = await _performanceReportService.RevenueInYearAsync();
         reports.Add(report);
-        report = await performanceReportService.BestSellerProductInYearAsync();
+        report = await _performanceReportService.BestSellerProductInYearAsync();
         reports.Add(report);
-        report = await performanceReportService.TopCustomerInYearAsync();
+        report = await _performanceReportService.TopCustomerInYearAsync();
         reports.Add(report);
         
         _logger.LogInformation("Creating reports");
-        var filePath = await performanceReportService.WriteToFileAsync(reports);
+        var filePath = await _performanceReportService.WriteToFileAsync(reports);
         
         _logger.LogInformation("Created report {FilePath}", filePath);
         

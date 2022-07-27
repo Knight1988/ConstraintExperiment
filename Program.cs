@@ -13,26 +13,26 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<Worker>();
         
-        services.AddDbContext<NonConstraintContext>();
-        services.AddDbContext<ConstraintContext>();
+        services.AddDbContext<NonConstraintContext>(ServiceLifetime.Transient);
+        services.AddDbContext<ConstraintContext>(ServiceLifetime.Transient);
 
-        services.AddScoped<IDataGenerateService, DataGenerateService>();
-        services.AddScoped<IPerformanceReportService, PerformanceReportService>();
+        services.AddSingleton<IDataGenerateService, DataGenerateService>();
+        services.AddSingleton<IPerformanceReportService, PerformanceReportService>();
         
-        services.AddScoped<ICustomerRepo, CustomerRepo>();
-        services.AddScoped<ICustomer2Repo, Customer2Repo>();
-        services.AddScoped<IProductRepo, ProductRepo>();
-        services.AddScoped<IProduct2Repo, Product2Repo>();
-        services.AddScoped<IProductCategoryRepo, ProductCategoryRepo>();
-        services.AddScoped<IProductCategory2Repo, ProductCategory2Repo>();
-        services.AddScoped<IOrderRepo, OrderRepo>();
-        services.AddScoped<IOrder2Repo, Order2Repo>();
-        services.AddScoped<IOrderDetailRepo, OrderDetailRepo>();
-        services.AddScoped<IOrderDetail2Repo, OrderDetail2Repo>();
-        services.AddScoped<IReportMonthRepo, ReportMonthRepo>();
-        services.AddScoped<IReportMonth2Repo, ReportMonth2Repo>();
-        services.AddScoped<IReportYearlyRepo, ReportYearlyRepo>();
-        services.AddScoped<IReportYearly2Repo, ReportYearly2Repo>();
+        services.AddSingleton<ICustomerRepo, CustomerRepo>();
+        services.AddSingleton<ICustomer2Repo, Customer2Repo>();
+        services.AddSingleton<IProductRepo, ProductRepo>();
+        services.AddSingleton<IProduct2Repo, Product2Repo>();
+        services.AddSingleton<IProductCategoryRepo, ProductCategoryRepo>();
+        services.AddSingleton<IProductCategory2Repo, ProductCategory2Repo>();
+        services.AddSingleton<IOrderRepo, OrderRepo>();
+        services.AddSingleton<IOrder2Repo, Order2Repo>();
+        services.AddSingleton<IOrderDetailRepo, OrderDetailRepo>();
+        services.AddSingleton<IOrderDetail2Repo, OrderDetail2Repo>();
+        services.AddSingleton<IReportMonthRepo, ReportMonthRepo>();
+        services.AddSingleton<IReportMonth2Repo, ReportMonth2Repo>();
+        services.AddSingleton<IReportYearlyRepo, ReportYearlyRepo>();
+        services.AddSingleton<IReportYearly2Repo, ReportYearly2Repo>();
     })
     .UseSerilog((ctx, lc) => lc
         .WriteTo.Console()

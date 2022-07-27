@@ -2,6 +2,7 @@
 
 public interface IDataGenerateService
 {
+    Task MigrateDatabaseAsync();
     Task FakeCustomerAsync();
     Task FakeProductCategoryAsync();
     Task FakeProductAsync();

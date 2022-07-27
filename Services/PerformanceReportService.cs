@@ -66,12 +66,13 @@ public class PerformanceReportService : IPerformanceReportService
         return Path.GetFullPath(fileName);
     }
 
-    private async Task<PerformanceReport> PerformanceTest<TNonConstraint, TConstraint>(string content, Task<TNonConstraint> nonConstraintTask,
-        Task<TConstraint> constraintTask)
+    private async Task<PerformanceReport> PerformanceTest<TNonConstraint, TConstraint>(string content, 
+        Func<Task<TNonConstraint>> nonConstraintFunc,
+        Func<Task<TConstraint>> constraintFunc)
     {
         var report = new PerformanceReport
         {
-            Content = "content",
+            Content = content,
             ConstraintTimes = new List<long>(),
             NonConstraintTimes = new List<long>()
         };
@@ -80,14 +81,14 @@ public class PerformanceReportService : IPerformanceReportService
 
         for (var i = 0; i <= repeatTimes; i++)
         {
-            var elapsedTime = await nonConstraintTask.GetElapsedTimeAsync();
+            var elapsedTime = await nonConstraintFunc().GetElapsedTimeAsync();
             // skip first result
             if (i != 0) report.NonConstraintTimes.Add(elapsedTime);
         }
 
         for (var i = 0; i <= repeatTimes; i++)
         {
-            var elapsedTime = await constraintTask.GetElapsedTimeAsync();
+            var elapsedTime = await constraintFunc().GetElapsedTimeAsync();
             // skip first result
             if (i != 0) report.ConstraintTimes.Add(elapsedTime);
         }
@@ -98,38 +99,38 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> RevenueLastMonthAsync()
     {
         return await PerformanceTest("Get revenue last month", 
-            _reportMonthRepo.RevenueMonthlyAsync(3),
-            _reportMonth2Repo.RevenueMonthlyAsync(3));
+            () => _reportMonthRepo.RevenueMonthlyAsync(3),
+            () => _reportMonth2Repo.RevenueMonthlyAsync(3));
     }
 
     public async Task<PerformanceReport> RevenueInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
         return await PerformanceTest("Get revenue this year", 
-            _reportYearlyRepo.RevenueInYearAsync(thisYear),
-            _reportYearly2Repo.RevenueInYearAsync(thisYear));
+            () => _reportYearlyRepo.RevenueInYearAsync(thisYear),
+            () => _reportYearly2Repo.RevenueInYearAsync(thisYear));
     }
 
     public async Task<PerformanceReport> BestSellerProductInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
         return await PerformanceTest("Best seller product this year", 
-            _reportYearlyRepo.BestSellerInYearAsync(thisYear, 10),
-            _reportYearly2Repo.BestSellerInYearAsync(thisYear, 10));
+            () => _reportYearlyRepo.BestSellerInYearAsync(thisYear, 10),
+            () => _reportYearly2Repo.BestSellerInYearAsync(thisYear, 10));
     }
 
     public async Task<PerformanceReport> TopCustomerInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
         return await PerformanceTest("Top customer this year", 
-            _reportYearlyRepo.TopCustomerInYearAsync(thisYear, 10),
-            _reportYearly2Repo.TopCustomerInYearAsync(thisYear, 10));
+            () => _reportYearlyRepo.TopCustomerInYearAsync(thisYear, 10),
+            () => _reportYearly2Repo.TopCustomerInYearAsync(thisYear, 10));
     }
 
     public async Task<PerformanceReport> SearchProductAsync()
     {
         return await PerformanceTest("Search Product", 
-            _productRepo.SearchAsync("Chicken", 0, 20),
-            _product2Repo.SearchAsync("Chicken", 0, 20));
+            () => _productRepo.SearchAsync("Chicken", 0, 20),
+            () => _product2Repo.SearchAsync("Chicken", 0, 20));
     }
 }
