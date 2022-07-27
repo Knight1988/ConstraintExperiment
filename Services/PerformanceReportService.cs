@@ -176,13 +176,14 @@ public class PerformanceReportService : IPerformanceReportService
 
     public async Task<PerformanceReport> DeleteCustomerAsync()
     {
+        var i = 1;
         return await PerformanceTest("Delete customer", async () =>
             {
-                var customer = await _customerRepo.GetByIdAsync(1);
+                var customer = await _customerRepo.GetByIdAsync(i++);
                 await _customerRepo.DeleteAsync(customer);
             }, async () =>
             {
-                var customer = await _customer2Repo.GetByIdAsync(1);
+                var customer = await _customer2Repo.GetByIdAsync(i++);
                 await _customer2Repo.DeleteAsync(customer);
             });
     }
