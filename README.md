@@ -1,6 +1,7 @@
 # ConstraintExperiment
 
-Test performance between database with constraint and non constraint
+Test performance between database with constraint and non constraint.
+
 Tests are perform on MS SQL Server 2019
 
 [TestReport](TestReport.md)
