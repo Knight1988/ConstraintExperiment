@@ -7,4 +7,5 @@ Tests are perform on MS SQL Server 2019
 
 ## Conclution
 
-There is almost no different between constraint and non constraint.
+There is almost no different when select, insert and update.
+But it has huge impact on delete because DB has to delete related record on another tables
