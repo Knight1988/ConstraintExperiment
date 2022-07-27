@@ -7,8 +7,6 @@ using ConstraintExperiment.Models.Constraint;
 using ConstraintExperiment.Models.NonConstraint;
 using ConstraintExperiment.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ConstraintExperiment.Services;
 
@@ -161,7 +159,7 @@ public class DataGenerateService : IDataGenerateService
         var fakeOrder = new Faker<Order2>()
             .RuleFor(p => p.Id, _ => orderId++)
             .RuleFor(p => p.Date, f => f.Date.Past(2))
-            .RuleFor(p => p.CustomerId, f => f.Random.Int(1, customerCount));
+            .RuleFor(p => p.CustomerId, f => f.Random.Int(0, customerCount - 1));
         
         var chunks = Convert.ToInt32(Math.Floor(count / Constants.BatchSize));
         var leftOver = Convert.ToInt32(count - chunks * Constants.BatchSize);
@@ -222,7 +220,12 @@ public class DataGenerateService : IDataGenerateService
 
     public async Task TearDownDatabaseAsync()
     {
-        await _constraintContext.GetInfrastructure().GetService<IMigrator>().MigrateAsync("0");
-        await _nonConstraintContext.GetInfrastructure().GetService<IMigrator>().MigrateAsync("0");
+        // Drop database
+        await _constraintContext.Database.EnsureDeletedAsync();
+        await _nonConstraintContext.Database.EnsureDeletedAsync();
+        
+        // Create database
+        await _constraintContext.Database.EnsureCreatedAsync();
+        await _nonConstraintContext.Database.EnsureCreatedAsync();
     }
 }

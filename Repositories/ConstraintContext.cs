@@ -20,11 +20,27 @@ public class ConstraintContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
-        var connectionString = _configuration.GetConnectionString("ConstraintDb");
         var contextTimeout = _configuration.GetValue<int>("ContextTimeout");
-        // connect to sql server with connection string from app settings
-        options.UseSqlServer(connectionString, builder => 
-            builder.CommandTimeout(contextTimeout));
+        var provider = _configuration.GetValue<string>("Provider");
+        switch (provider)
+        {
+            case "MSSQL":
+            {
+                options.UseSqlServer(_configuration.GetConnectionString("ConstraintMssql"), builder => 
+                    builder.CommandTimeout(contextTimeout));
+                break;
+            }
+            case "Postgres":
+            {
+                options.UseNpgsql(_configuration.GetConnectionString("ConstraintPostgres"), builder =>
+                    builder.CommandTimeout(contextTimeout));
+                // fix error: Cannot write DateTime with Kind=Local to PostgreSQL type 'timestamp with time zone'
+                AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                break;
+            }
+            default:
+                throw new Exception($"Unsupported provider: {provider}");
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
