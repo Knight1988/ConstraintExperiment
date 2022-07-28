@@ -4,11 +4,11 @@ namespace ConstraintExperiment.Commons;
 
 public static class PerformanceCounter
 {
-    public static async Task<long> GetElapsedTimeAsync(this Task task)
+    public static async Task<long> GetElapsedTimeAsync(this Func<Task> task)
     {
         var stopWatch = new Stopwatch();
         stopWatch.Start();
-        await task;
+        await task();
         stopWatch.Stop();
         return stopWatch.ElapsedMilliseconds;
     }

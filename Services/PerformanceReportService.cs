@@ -98,14 +98,14 @@ public class PerformanceReportService : IPerformanceReportService
 
         for (var i = 0; i <= repeatTimes; i++)
         {
-            var elapsedTime = await nonConstraintFunc().GetElapsedTimeAsync();
+            var elapsedTime = await nonConstraintFunc.GetElapsedTimeAsync();
             // skip first result
             if (i != 0) report.NonConstraintTimes.Add(elapsedTime);
         }
 
         for (var i = 0; i <= repeatTimes; i++)
         {
-            var elapsedTime = await constraintFunc().GetElapsedTimeAsync();
+            var elapsedTime = await constraintFunc.GetElapsedTimeAsync();
             // skip first result
             if (i != 0) report.ConstraintTimes.Add(elapsedTime);
         }
@@ -115,7 +115,7 @@ public class PerformanceReportService : IPerformanceReportService
 
     public async Task<PerformanceReport> RevenueLastMonthAsync()
     {
-        return await PerformanceTest("Get revenue last month", 
+        return await PerformanceTest("Get revenue last month",
             () => _reportMonthRepo.RevenueMonthlyAsync(3),
             () => _reportMonth2Repo.RevenueMonthlyAsync(3));
     }
@@ -123,7 +123,7 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> RevenueInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
-        return await PerformanceTest("Get revenue this year", 
+        return await PerformanceTest("Get revenue this year",
             () => _reportYearlyRepo.RevenueInYearAsync(thisYear),
             () => _reportYearly2Repo.RevenueInYearAsync(thisYear));
     }
@@ -131,7 +131,7 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> BestSellerProductInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
-        return await PerformanceTest("Best seller product this year", 
+        return await PerformanceTest("Best seller product this year",
             () => _reportYearlyRepo.BestSellerInYearAsync(thisYear, 10),
             () => _reportYearly2Repo.BestSellerInYearAsync(thisYear, 10));
     }
@@ -139,7 +139,7 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> TopCustomerInYearAsync()
     {
         var thisYear = DateTime.Now.Year;
-        return await PerformanceTest("Top customer this year", 
+        return await PerformanceTest("Top customer this year",
             () => _reportYearlyRepo.TopCustomerInYearAsync(thisYear, 10),
             () => _reportYearly2Repo.TopCustomerInYearAsync(thisYear, 10));
     }
@@ -147,13 +147,13 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> SearchProductAsync()
     {
         return await PerformanceTest("Search Product", 
-            () => _productRepo.SearchAsync("Chicken", 0, 20),
-            () => _product2Repo.SearchAsync("Chicken", 0, 20));
+            async () => await _productRepo.SearchAsync("Chicken", 0, 20),
+            async () => await _product2Repo.SearchAsync("Chicken", 0, 20));
     }
 
     public async Task<PerformanceReport> InsertCustomerAsync()
     {
-        return await PerformanceTest("Insert customer", 
+        return await PerformanceTest("Insert customer",
             () =>
             {
                 var customers = _fakerService.GenerateCustomer(1);
@@ -169,27 +169,27 @@ public class PerformanceReportService : IPerformanceReportService
     public async Task<PerformanceReport> UpdateCustomerAsync()
     {
         return await PerformanceTest("Update customer", async () =>
-            {
-                var customer = await _customerRepo.GetByIdAsync(1);
-                await _customerRepo.UpdateAsync(customer);
-            }, async () =>
-            {
-                var customer = await _customer2Repo.GetByIdAsync(1);
-                await _customer2Repo.UpdateAsync(customer);
-            });
+        {
+            var customer = await _customerRepo.GetByIdAsync(1);
+            await _customerRepo.UpdateAsync(customer);
+        }, async () =>
+        {
+            var customer = await _customer2Repo.GetByIdAsync(1);
+            await _customer2Repo.UpdateAsync(customer);
+        });
     }
 
     public async Task<PerformanceReport> DeleteCustomerAsync()
     {
         var i = 1;
         return await PerformanceTest("Delete customer", async () =>
-            {
-                var customer = await _customerRepo.GetByIdAsync(i++);
-                await _customerRepo.DeleteAsync(customer);
-            }, async () =>
-            {
-                var customer = await _customer2Repo.GetByIdAsync(i++);
-                await _customer2Repo.DeleteAsync(customer);
-            });
+        {
+            var customer = await _customerRepo.GetByIdAsync(i++);
+            await _customerRepo.DeleteAsync(customer);
+        }, async () =>
+        {
+            var customer = await _customer2Repo.GetByIdAsync(i++);
+            await _customer2Repo.DeleteAsync(customer);
+        });
     }
 }
