@@ -28,7 +28,7 @@ public class Customer2Repo: BaseRepo<Customer2>, ICustomer2Repo
         {
             sqlBuilder.Append($"({customer.Id}, '{customer.Name.Replace("'", "\\'")}'),");
         }
-
+    
         var sql = sqlBuilder.ToString().TrimEnd(',');
         await _context.Database.ExecuteSqlRawAsync(sql);
     }

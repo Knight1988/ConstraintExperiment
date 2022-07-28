@@ -6,6 +6,7 @@ Test performance between database with constraint and non constraint
 |--|--|
 |MS SQL Server 2019|[TestReport](TestReport-Mssql.md)|
 |Postgres 14|[TestReport](TestReport-Postgres.md)|
+|Mysql 8|[TestReport](TestReport-Mysql.md)|
 
 ## Conclusion
 
