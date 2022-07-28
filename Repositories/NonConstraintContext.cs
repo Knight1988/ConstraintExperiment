@@ -21,21 +21,27 @@ public class NonConstraintContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder options)
     {
         var contextTimeout = _configuration.GetValue<int>("ContextTimeout");
-        var provider = _configuration.GetValue<string>("Provider");
+        var provider = _configuration.GetValue<string>("Provider").ToLowerInvariant();
         switch (provider)
         {
-            case "MSSQL":
+            case "mssql":
             {
                 options.UseSqlServer(_configuration.GetConnectionString("NonConstraintMssql"), builder => 
                     builder.CommandTimeout(contextTimeout));
                 break;
             }
-            case "Postgres":
+            case "postgres":
             {
                 options.UseNpgsql(_configuration.GetConnectionString("NonConstraintPostgres"), builder =>
                     builder.CommandTimeout(contextTimeout));
                 // fix error: Cannot write DateTime with Kind=Local to PostgreSQL type 'timestamp with time zone'
                 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+                break;
+            }
+            case "mysql":
+            {
+                options.UseMySQL(_configuration.GetConnectionString("NonConstraintMysql"), builder =>
+                    builder.CommandTimeout(contextTimeout));
                 break;
             }
             default:

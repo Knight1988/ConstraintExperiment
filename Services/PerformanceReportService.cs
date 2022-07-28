@@ -41,11 +41,12 @@ public class PerformanceReportService : IPerformanceReportService
 
     public async Task<string> WriteToFileAsync(IEnumerable<PerformanceReport> reports)
     {
-        const string fileName = "PerformanceReport.md";
+        var provider = _configuration.GetValue<string>("Provider");
+        var fileName = $"TestReport-{provider}.md";
         await using StreamWriter file = new(fileName);
         await file.WriteLineAsync("## Performance Test Report");
         await file.WriteLineAsync(string.Empty);
-        await file.WriteLineAsync($"Provider: {_configuration.GetValue<string>("Provider")}");
+        await file.WriteLineAsync($"Provider: {provider}");
         await file.WriteLineAsync(string.Empty);
         await file.WriteLineAsync($"Test time: {DateTime.Now:yyyy/MM/dd HH:mm:ss}");
         await file.WriteLineAsync(string.Empty);
