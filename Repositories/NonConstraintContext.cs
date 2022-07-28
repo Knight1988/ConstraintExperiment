@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ConstraintExperiment.Repositories;
 
-public class NonConstraintContext : DbContext
+public class NonConstraintContext : BaseContext
 {
     private readonly IConfiguration _configuration;
 
@@ -42,6 +42,7 @@ public class NonConstraintContext : DbContext
             {
                 options.UseMySQL(_configuration.GetConnectionString("NonConstraintMysql"), builder =>
                     builder.CommandTimeout(contextTimeout));
+                IsMySql = true;
                 break;
             }
             default:
